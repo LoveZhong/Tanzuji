@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>碳足迹知识考察</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>碳足迹知识考察</h1>
+    <h1>如果满分都得不了，重开吧</h1>
+    <form id="quizForm">
+        <p>1. 以下哪种能源在使用过程中产生的碳足迹相对较低？（单选题）</p>
+        <label><input type="radio" name="q1" value="a"> 煤炭</label>
+        <label><input type="radio" name="q1" value="b"> 石油</label>
+        <label><input type="radio" name="q1" value="c"> 太阳能</label>
+
+        <p>2. 下列哪项日常行为会增加个人碳足迹？（单选题）</p>
+        <label><input type="radio" name="q2" value="a"> 步行上班</label>
+        <label><input type="radio" name="q2" value="b"> 使用节能电器</label>
+        <label><input type="radio" name="q2" value="c"> 频繁使用一次性塑料制品</label>
+
+        <p>3. 企业计算碳足迹时，需要考虑以下哪些方面？（多选题）</p>
+        <label><input type="checkbox" name="q3" value="a"> 生产过程中的能源消耗</label>
+        <label><input type="checkbox" name="q3" value="b"> 员工通勤产生的排放</label>
+        <label><input type="checkbox" name="q3" value="c"> 产品运输过程的排放</label>
+        <label><input type="checkbox" name="q3" value="d"> 办公室用电</label>
+
+        <p>4. 以下关于碳足迹的说法，正确的是？（单选题）</p>
+        <label><input type="radio" name="q4" value="a"> 碳足迹只与工业生产有关</label>
+        <label><input type="radio" name="q4" value="b"> 碳足迹是指温室气体排放总量</label>
+        <label><input type="radio" name="q4" value="c"> 减少碳足迹对环境保护没有帮助</label>
+
+        <p>5. 国家在统计碳足迹时，主要关注哪些领域？（单选题）</p>
+        <label><input type="radio" name="q5" value="a"> 仅农业领域</label>
+        <label><input type="radio" name="q5" value="b"> 能源、工业、交通等多个领域</label>
+        <label><input type="radio" name="q5" value="c"> 只有居民生活领域</label>
+
+        <button type="submit">提交答案</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('quizForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            let score = 0;
+            let correctAnswers = {
+                q1: 'c',
+                q2: 'c',
+                q3: ['a', 'b', 'c', 'd'],
+                q4: 'b',
+                q5: 'b'
+            };
+
+            // 第一题
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            if (q1 && q1.value === correctAnswers.q1) {
+                score++;
+            }
+
+            // 第二题
+            const q2 = document.querySelector('input[name="q2"]:checked');
+            if (q2 && q2.value === correctAnswers.q2) {
+                score++;
+            }
+
+            // 第三题
+            const q3 = document.querySelectorAll('input[name="q3"]:checked');
+            let q3Selected = [];
+            q3.forEach((checkbox) => {
+                q3Selected.push(checkbox.value);
+            });
+            let isQ3Correct = true;
+            correctAnswers.q3.forEach((correct) => {
+                if (!q3Selected.includes(correct)) {
+                    isQ3Correct = false;
+                    return;
+                }
+            });
+            q3Selected.forEach((selected) => {
+                if (!correctAnswers.q3.includes(selected)) {
+                    isQ3Correct = false;
+                    return;
+                }
+            });
+            if (isQ3Correct) {
+                score++;
+            }
+
+            // 第四题
+            const q4 = document.querySelector('input[name="q4"]:checked');
+            if (q4 && q4.value === correctAnswers.q4) {
+                score++;
+            }
+
+            // 第五题
+            const q5 = document.querySelector('input[name="q5"]:checked');
+            if (q5 && q5.value === correctAnswers.q5) {
+                score++;
+            }
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `<p>您的得分是：${score} / 5</p>`;
+            resultDiv.innerHTML += '<p>正确答案如下：</p>';
+            for (let question in correctAnswers) {
+                if (question === 'q3') {
+                    resultDiv.innerHTML += `<p>${question}：${correctAnswers[question].join(', ')}</p>`;
+                } else {
+                    resultDiv.innerHTML += `<p>${question}：${correctAnswers[question]}</p>`;
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
